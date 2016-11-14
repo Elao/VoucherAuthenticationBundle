@@ -2,13 +2,14 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Authentication\Provider;
 
+use Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token\VoucherToken;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\IntentedVoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\NonceExpiredException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token\VoucherToken;
-use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherProviderInterface;
 
 class VoucherAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -45,8 +46,16 @@ class VoucherAuthenticationProvider implements AuthenticationProviderInterface
     {
         $voucher = $this->voucherProvider->use($token->getCredentials());
 
-        if (!$voucher || $voucher->isExpired()) {
+        if (!$voucher) {
             throw new AuthenticationException('No valid token found.');
+        }
+
+        if ($voucher->isExpired()) {
+            throw new AuthenticationException('Token has expired.');
+        }
+
+        if ($voucher instanceof IntentedVoucherInterface && 'authenticate' !== $voucher->getIntent()) {
+            throw new AuthenticationException('Invalid token: intent missmatch.');
         }
 
         $user = $this->userProvider->loadUserByUsername($voucher->getUsername());
@@ -55,7 +64,7 @@ class VoucherAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('User not found.');
         }
 
-        $authenticatedToken = new VoucherToken($token->getCredentials(), $user->getRoles());
+        $authenticatedToken = new VoucherToken($voucher, $user->getRoles());
         $authenticatedToken->setAuthenticated(true);
         $authenticatedToken->setUser($user);
 

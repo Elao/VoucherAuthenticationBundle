@@ -3,12 +3,12 @@
 namespace Elao\Bundle\VoucherAuthenticationBundle\Voucher;
 
 use DateTime;
-use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\IntentedVoucherInterface;
 
 /**
  * Voucher
  */
-class Voucher implements VoucherInterface
+class Voucher implements IntentedVoucherInterface
 {
     /**
      * Random 32 character length string
@@ -25,6 +25,13 @@ class Voucher implements VoucherInterface
     protected $username;
 
     /**
+     * Intent
+     *
+     * @var string
+     */
+    protected $intent;
+
+    /**
      * Expiration date
      *
      * @var DateTime
@@ -34,12 +41,14 @@ class Voucher implements VoucherInterface
     /**
      * Constructor
      *
-     * @param string $username
+     * @param string $username Username for UserProvider
+     * @param string $intent Intent: e.g. authenticate, forgot-password, validate-email,...
      * @param string $ttl
      */
-    public function __construct($username, $ttl = '+15 minutes')
+    public function __construct($username, $intent = 'authenticate', $ttl = '+15 minutes')
     {
         $this->username = $username;
+        $this->intent = $intent;
         $this->expiration = new DateTime($ttl);
         $this->token = static::generateToken();
     }
@@ -52,6 +61,16 @@ class Voucher implements VoucherInterface
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * Get intent
+     *
+     * @return string
+     */
+    public function getIntent()
+    {
+        return $this->intent;
     }
 
     /**
@@ -102,6 +121,7 @@ class Voucher implements VoucherInterface
         return serialize([
             $this->token,
             $this->username,
+            $this->intent,
             $this->expiration,
         ]);
     }
@@ -111,6 +131,6 @@ class Voucher implements VoucherInterface
      */
     public function unserialize($serialized)
     {
-        list($this->token, $this->username, $this->expiration) = unserialize($serialized);
+        list($this->token, $this->username, $this->intent, $this->expiration) = unserialize($serialized);
     }
 }
