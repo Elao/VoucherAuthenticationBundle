@@ -1,0 +1,30 @@
+{
+    "name": "elao/voucher-authentication-bundle",
+    "description": "Provide authentication through vouchers (for email link).",
+    "type": "symfony-bundle",
+    "keywords": ["authentication", "security", "symfony", "bundle", "elao"],
+    "homepage": "https://github.com/Elao/VoucherAuthenticationBundle.git",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Jarrand",
+            "email": "thomas.jarrand@gmail.com",
+            "homepage": "https://github.com/Tom32i"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/security-bundle": "~2.7|~3.0",
+        "symfony/framework-bundle": "~2.7|~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Elao\\Bundle\\VoucherAuthenticationBundle\\": "."
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}

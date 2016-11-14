@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service
+            id="security.authentication.provider.voucher"
+            class="Elao\Bundle\VoucherAuthenticationBundle\Authentication\Provider\VoucherAuthenticationProvider"
+            public="false"
+        >
+            <argument /> <!-- User Provider -->
+            <argument /> <!-- Voucher Provider -->
+        </service>
+
+        <service id="security.authentication.listener.voucher"
+            class="Elao\Bundle\VoucherAuthenticationBundle\Security\Firewall\VoucherListener"
+            parent="security.authentication.listener.abstract"
+            abstract="true"
+            public="false"
+        >
+        </service>
+    </services>
+</container>
