@@ -20,7 +20,8 @@ class ElaoVoucherGenerateCommand extends ContainerAwareCommand
             ->setName('elao:voucher:generate')
             ->setDescription('Generate an authentication voucher for the given username')
             ->addArgument('username', InputArgument::REQUIRED, 'The username')
-            ->addOption('ttl', 't', InputOption::VALUE_REQUIRED, 'Time to live', '+15 minutes')
+            ->addArgument('intent', InputArgument::OPTIONAL, 'The intent', 'authenticate')
+            ->addArgument('ttl', InputArgument::OPTIONAL, 'The time-to-live', '+15 minutes')
         ;
     }
 
@@ -31,7 +32,8 @@ class ElaoVoucherGenerateCommand extends ContainerAwareCommand
     {
         $voucher = new Voucher(
             $input->getArgument('username'),
-            $input->getOption('ttl')
+            $input->getArgument('intent'),
+            $input->getArgument('ttl')
         );
 
         if (!$this->getVoucherProvider()->persist($voucher)) {
@@ -39,9 +41,10 @@ class ElaoVoucherGenerateCommand extends ContainerAwareCommand
         }
 
         $output->writeln(sprintf(
-            'Authentication voucher for user <info>%s</info>:%s<comment>%s</comment>',
+            'Voucher for user <info>%s</info> with intent <comment>%s</comment> and expriation on <comment>%s</comment>: %s',
             $voucher->getUsername(),
-            PHP_EOL,
+            $voucher->getIntent(),
+            $voucher->getExpiration()->format('Y-m-d H:i:s'),
             $voucher->getToken()
         ));
     }

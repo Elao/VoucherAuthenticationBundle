@@ -3,6 +3,7 @@
 namespace Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
 
 /**
  * Voucher token
@@ -10,20 +11,16 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 class VoucherToken extends AbstractToken
 {
     /**
-     * Credentials (token)
+     * Constructor
      *
-     * @var string
+     * @param VoucherInterface|string $voucher
+     * @param array $roles
      */
-    public $credentials;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($credentials, array $roles = array())
+    public function __construct($voucher, array $roles = [])
     {
         parent::__construct($roles);
 
-        $this->credentials = $credentials;
+        $this->setAttribute('voucher', $voucher);
     }
 
     /**
@@ -31,33 +28,6 @@ class VoucherToken extends AbstractToken
      */
     public function getCredentials()
     {
-        return $this->credentials;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function eraseCredentials()
-    {
-        parent::eraseCredentials();
-
-        $this->credentials = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function serialize()
-    {
-        return serialize(array($this->credentials, parent::serialize()));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($str)
-    {
-        list($this->credentials, $parentStr) = unserialize($str);
-        parent::unserialize($parentStr);
+        return null;
     }
 }
