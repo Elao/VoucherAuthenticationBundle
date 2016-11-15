@@ -5,8 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service
-            id="security.authentication.provider.voucher"
+        <service id="security.authentication.provider.voucher"
             class="Elao\Bundle\VoucherAuthenticationBundle\Authentication\Provider\VoucherAuthenticationProvider"
             public="false"
         >
@@ -20,6 +19,19 @@
             abstract="true"
             public="false"
         >
+        </service>
+
+        <service id="elao_voucher_authentication.success_handler.intent"
+            class="Elao\Bundle\VoucherAuthenticationBundle\Security\Http\Authentication\IntentAuthenticationSuccessHandler"
+            parent="security.authentication.success_handler"
+        >
+        </service>
+
+        <service id="security.access.intented_voucher_voter"
+            class="Elao\Bundle\VoucherAuthenticationBundle\Security\Voter\IntentedVoucherVoter"
+            public="false"
+        >
+            <tag name="security.voter" />
         </service>
     </services>
 </container>

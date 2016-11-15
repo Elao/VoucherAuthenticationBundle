@@ -14,12 +14,15 @@ use Symfony\Component\DependencyInjection\Reference;
 class VoucherFactory extends AbstractFactory
 {
     /**
-     * {@inheritdoc}
+     * Constructor
      */
     public function __construct()
     {
-        $this->addOption('token_parameter', 'token');
+        $this->addOption('login_path', 'voucher');
         $this->addOption('check_path', 'voucher');
+        $this->addOption('token_parameter', 'token');
+
+        $this->defaultSuccessHandlerOptions['target_paths'] = [];
     }
 
     /**
@@ -73,6 +76,27 @@ class VoucherFactory extends AbstractFactory
             ->scalarNode('voucher_provider')
                 ->cannotBeEmpty()
                 ->defaultValue('elao_voucher_authentication.voucher_provider.default')
+            ->end()
+            ->scalarNode('success_handler')
+                ->defaultValue('elao_voucher_authentication.success_handler.intent')
+            ->end()
+            ->arrayNode('target_paths')
+                ->useAttributeAsKey('intent')
+                ->prototype('array')
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function ($value) { return ['path' => $value]; })
+                    ->end()
+                    ->children()
+                        ->scalarNode('intent')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('path')
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
     }

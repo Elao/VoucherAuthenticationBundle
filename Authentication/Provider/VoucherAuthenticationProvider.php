@@ -44,7 +44,7 @@ class VoucherAuthenticationProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
-        $voucher = $this->voucherProvider->use($token->getCredentials());
+        $voucher = $this->voucherProvider->use($token->getAttribute('voucher'));
 
         if (!$voucher) {
             throw new AuthenticationException('No valid token found.');
@@ -52,10 +52,6 @@ class VoucherAuthenticationProvider implements AuthenticationProviderInterface
 
         if ($voucher->isExpired()) {
             throw new AuthenticationException('Token has expired.');
-        }
-
-        if ($voucher instanceof IntentedVoucherInterface && 'authenticate' !== $voucher->getIntent()) {
-            throw new AuthenticationException('Invalid token: intent missmatch.');
         }
 
         $user = $this->userProvider->loadUserByUsername($voucher->getUsername());

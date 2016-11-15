@@ -11,13 +11,6 @@ use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
 class VoucherToken extends AbstractToken
 {
     /**
-     * Voucher
-     *
-     * @var VoucherInterface|string
-     */
-    private $voucher;
-
-    /**
      * Constructor
      *
      * @param VoucherInterface|string $voucher
@@ -27,43 +20,14 @@ class VoucherToken extends AbstractToken
     {
         parent::__construct($roles);
 
-        $this->voucher = $voucher;
+        $this->setAttribute('voucher', $voucher);
     }
 
     /**
-     * The voucher
-     *
-     * @return VoucherInterface|string
+     * {@inheritdoc}
      */
     public function getCredentials()
     {
-        return $this->voucher;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function eraseCredentials()
-    {
-        parent::eraseCredentials();
-
-        $this->voucher = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function serialize()
-    {
-        return serialize([$this->voucher, parent::serialize()]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($str)
-    {
-        list($this->voucher, $parentStr) = unserialize($str);
-        parent::unserialize($parentStr);
+        return null;
     }
 }
