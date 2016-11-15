@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Voucher Authentication bundle.
+ *
+ * Copyright © élao <contact@elao.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Elao\Bundle\VoucherAuthenticationBundle\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
@@ -85,7 +94,9 @@ class VoucherFactory extends AbstractFactory
                 ->prototype('array')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function ($value) { return ['path' => $value]; })
+                        ->then(function ($value) {
+                            return ['path' => $value];
+                        })
                     ->end()
                     ->children()
                         ->scalarNode('intent')

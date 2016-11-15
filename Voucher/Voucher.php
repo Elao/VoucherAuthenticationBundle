@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Voucher Authentication bundle.
+ *
+ * Copyright © élao <contact@elao.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Elao\Bundle\VoucherAuthenticationBundle\Voucher;
 
 use DateTime;
@@ -42,7 +51,7 @@ class Voucher implements IntentedVoucherInterface
      * Constructor
      *
      * @param string $username Username for UserProvider
-     * @param string $intent Intent: e.g. authenticate, forgot-password, validate-email,...
+     * @param string $intent   Intent: e.g. authenticate, forgot-password, validate-email,...
      * @param string $ttl
      */
     public function __construct($username, $intent = 'authenticate', $ttl = '+15 minutes')
@@ -96,7 +105,7 @@ class Voucher implements IntentedVoucherInterface
     /**
      * Is expired?
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpired(DateTime $date = null)
     {

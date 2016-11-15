@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * This file is part of the Voucher Authentication bundle.
+ *
+ * Copyright © élao <contact@elao.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Elao\Bundle\VoucherAuthenticationBundle\Voucher\Provider;
 
-use Psr\Cache\CacheItemPoolInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherProviderInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Voucher\Voucher;
+use Psr\Cache\CacheItemPoolInterface;
 
 class CacheVoucherProvider implements VoucherProviderInterface
 {

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Voucher Authentication bundle.
+ *
+ * Copyright © élao <contact@elao.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Elao\Bundle\VoucherAuthenticationBundle\Security\Http\Authentication;
 
 use Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token\VoucherToken;
@@ -17,7 +26,7 @@ class IntentAuthenticationSuccessHandler extends DefaultAuthenticationSuccessHan
     /**
      * {@inheritdoc}
      */
-    public function __construct(HttpUtils $httpUtils, array $options = array())
+    public function __construct(HttpUtils $httpUtils, array $options = [])
     {
         $this->defaultOptions['target_paths'] = [];
 

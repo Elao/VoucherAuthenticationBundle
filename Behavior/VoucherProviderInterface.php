@@ -1,8 +1,15 @@
 <?php
 
-namespace Elao\Bundle\VoucherAuthenticationBundle\Behavior;
+/*
+ * This file is part of the Voucher Authentication bundle.
+ *
+ * Copyright © élao <contact@elao.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
+namespace Elao\Bundle\VoucherAuthenticationBundle\Behavior;
 
 /**
  * Voucher provider interface
@@ -23,7 +30,7 @@ interface VoucherProviderInterface
      *
      * @param VoucherInterface $voucher The voucher to save
      *
-     * @return boolean Success
+     * @return bool Success
      */
     public function persist(VoucherInterface $voucher);
 }
