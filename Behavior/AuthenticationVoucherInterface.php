@@ -11,25 +11,15 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Behavior;
 
-use DateTime;
-use Serializable;
-
 /**
- * Voucher interface
+ * A Voucher dedicated to Authentication
  */
-interface VoucherInterface extends Serializable
+interface AuthenticationVoucherInterface extends VoucherInterface
 {
     /**
-     * Get token
+     * Get username
      *
      * @return string
      */
-    public function getToken();
-
-    /**
-     * Is the voucher expired?
-     *
-     * @return bool
-     */
-    public function isExpired();
+    public function getUsername();
 }

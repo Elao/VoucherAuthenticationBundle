@@ -46,10 +46,7 @@ class ElaoVoucherAuthenticationExtension extends Extension
 
             if (!$cacheId = $config['voucher_provider_cache']) {
                 $cacheId = 'elao_voucher_authentication.voucher_provider_cache.file_system';
-                $definition = new Definition(
-                    'Symfony\Component\Cache\Adapter\FilesystemAdapter',
-                    ['vouchers']
-                );
+                $definition = new Definition('Symfony\Component\Cache\Adapter\FilesystemAdapter', ['vouchers']);
                 $container->setDefinition($cacheId, $definition);
             }
 

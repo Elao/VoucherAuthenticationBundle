@@ -11,7 +11,8 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token;
 
-use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
+use InvalidArgumentException;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\AuthenticationVoucherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
@@ -27,6 +28,13 @@ class VoucherToken extends AbstractToken
      */
     public function __construct($voucher, array $roles = [])
     {
+        if (!is_string($voucher) && !$voucher instanceof AuthenticationVoucherInterface) {
+            throw new InvalidArgumentException(sprintf(
+                'VoucherToken expect a string or an instance of "%s"',
+                AuthenticationVoucherInterface::class
+            ));
+        }
+
         parent::__construct($roles);
 
         $this->setAttribute('voucher', $voucher);

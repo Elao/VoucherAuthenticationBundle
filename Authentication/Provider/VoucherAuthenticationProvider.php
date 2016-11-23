@@ -12,6 +12,7 @@
 namespace Elao\Bundle\VoucherAuthenticationBundle\Authentication\Provider;
 
 use Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token\VoucherToken;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\AuthenticationVoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -51,10 +52,14 @@ class VoucherAuthenticationProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
-        $voucher = $this->voucherProvider->use($token->getAttribute('voucher'));
+        $voucher = $this->voucherProvider->get($token->getAttribute('voucher'));
 
-        if (!$voucher) {
+        if (!$voucher || !$voucher instanceof AuthenticationVoucherInterface) {
             throw new AuthenticationException('No valid token found.');
+        }
+
+        if ($voucher instanceof DisposableVoucherInterface) {
+            $this->voucherProvider->delete($voucher->getToken());
         }
 
         if ($voucher->isExpired()) {

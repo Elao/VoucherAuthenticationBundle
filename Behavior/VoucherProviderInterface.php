@@ -17,15 +17,6 @@ namespace Elao\Bundle\VoucherAuthenticationBundle\Behavior;
 interface VoucherProviderInterface
 {
     /**
-     * Get voucher by token and mark it as used (token can only be used once)
-     *
-     * @param string $token
-     *
-     * @return Voucher|null
-     */
-    public function use($token);
-
-    /**
      * Persist the given token
      *
      * @param VoucherInterface $voucher The voucher to save
@@ -33,4 +24,22 @@ interface VoucherProviderInterface
      * @return bool Success
      */
     public function persist(VoucherInterface $voucher);
+
+    /**
+     * Get a voucher by its token.
+     *
+     * @param string $token
+     *
+     * @return Voucher|null
+     */
+    public function get($token);
+
+    /**
+     * Delete the voucher corresponding to the given token.
+     *
+     * @param string $token
+     *
+     * @return Voucher|null
+     */
+    public function delete($token);
 }

@@ -11,12 +11,13 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Voucher\Provider;
 
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\DisposableVoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\TimedVoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherProviderInterface;
-use Elao\Bundle\VoucherAuthenticationBundle\Voucher\Voucher;
 use Psr\Cache\CacheItemPoolInterface;
 
-class CacheVoucherProvider implements VoucherProviderInterface
+class DefaultVoucherProvider implements VoucherProviderInterface
 {
     /**
      * Cache
@@ -44,41 +45,28 @@ class CacheVoucherProvider implements VoucherProviderInterface
         $item = $this->cache->getItem($key);
 
         $item->set($voucher);
-        $item->expiresAt($voucher->getExpiration());
+
+        if ($voucher instanceof TimedVoucherInterface) {
+            $item->expiresAt($voucher->getExpiration());
+        }
 
         return $this->cache->save($item);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inhertidoc}
      */
-    public function use($token)
+    public function get($token)
     {
-        if ($voucher = $this->getByToken($token)) {
-            $this->deleteByToken($token);
-        }
-
-        return $voucher;
-    }
-
-    /**
-     * Delete the voucher corresponding to the given token
-     *
-     * @param string $token
-     *
-     * @return boolen success
-     */
-    private function deleteByToken($token)
-    {
-        return $this->cache->deleteItem($this->getCacheKey($token));
+        return $this->cache->getItem($this->getCacheKey($token))->get();
     }
 
     /**
      * {@inhertidoc}
      */
-    private function getByToken($token)
+    public function delete($token)
     {
-        return $this->cache->getItem($this->getCacheKey($token))->get();
+        return $this->cache->deleteItem($this->getCacheKey($token));
     }
 
     /**

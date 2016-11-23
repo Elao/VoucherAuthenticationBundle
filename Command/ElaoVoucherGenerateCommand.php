@@ -11,7 +11,7 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Command;
 
-use Elao\Bundle\VoucherAuthenticationBundle\Voucher\Voucher;
+use Elao\Bundle\VoucherAuthenticationBundle\Voucher\DisposableAuthenticationVoucher;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,10 +25,9 @@ class ElaoVoucherGenerateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('elao:voucher:generate')
-            ->setDescription('Generate an authentication voucher for the given username')
+            ->setName('voucher:generate:authentication')
+            ->setDescription('Generate a disposable authentication voucher for the given username')
             ->addArgument('username', InputArgument::REQUIRED, 'The username')
-            ->addArgument('intent', InputArgument::OPTIONAL, 'The intent', 'authenticate')
             ->addArgument('ttl', InputArgument::OPTIONAL, 'The time-to-live', '+15 minutes')
         ;
     }
@@ -38,9 +37,8 @@ class ElaoVoucherGenerateCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $voucher = new Voucher(
+        $voucher = new DisposableAuthenticationVoucher(
             $input->getArgument('username'),
-            $input->getArgument('intent'),
             $input->getArgument('ttl')
         );
 
@@ -49,9 +47,8 @@ class ElaoVoucherGenerateCommand extends ContainerAwareCommand
         }
 
         $output->writeln(sprintf(
-            'Voucher for user <info>%s</info> with intent <comment>%s</comment> and expriation on <comment>%s</comment>: %s',
+            'Authentication voucher for user <info>%s</info> with expiration on <comment>%s</comment>: %s',
             $voucher->getUsername(),
-            $voucher->getIntent(),
             $voucher->getExpiration()->format('Y-m-d H:i:s'),
             $voucher->getToken()
         ));

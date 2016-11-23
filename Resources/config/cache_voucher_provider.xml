@@ -5,9 +5,14 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service
-            id="elao_voucher_authentication.voucher_provider.cache"
-            class="Elao\Bundle\VoucherAuthenticationBundle\Voucher\Provider\CacheVoucherProvider"
+        <service id="elao_voucher_authentication.voucher_provider.cache"
+            class="Elao\Bundle\VoucherAuthenticationBundle\Voucher\Provider\DefaultVoucherProvider"
+        >
+            <argument type="service" id="elao_voucher_authentication.voucher_store.cache" />
+        </service>
+
+        <service id="elao_voucher_authentication.voucher_store.cache"
+            class="Elao\Bundle\VoucherAuthenticationBundle\Voucher\Store\CacheVoucherStore"
         >
             <argument /> <!-- Cache pool -->
         </service>

@@ -12,12 +12,15 @@
 namespace Elao\Bundle\VoucherAuthenticationBundle\Voucher;
 
 use DateTime;
-use Elao\Bundle\VoucherAuthenticationBundle\Behavior\IntentedVoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\AuthenticationVoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\DisposableVoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\TimedVoucherInterface;
+use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
 
 /**
  * Voucher
  */
-class Voucher implements IntentedVoucherInterface
+class DisposableAuthenticationVoucher implements VoucherInterface, AuthenticationVoucherInterface, TimedVoucherInterface, DisposableVoucherInterface
 {
     /**
      * Random 32 character length string
@@ -34,13 +37,6 @@ class Voucher implements IntentedVoucherInterface
     protected $username;
 
     /**
-     * Intent
-     *
-     * @var string
-     */
-    protected $intent;
-
-    /**
      * Expiration date
      *
      * @var DateTime
@@ -51,13 +47,11 @@ class Voucher implements IntentedVoucherInterface
      * Constructor
      *
      * @param string $username Username for UserProvider
-     * @param string $intent   Intent: e.g. authenticate, forgot-password, validate-email,...
-     * @param string $ttl
+     * @param string $ttl      Time to live (support for DateTime constructor)
      */
-    public function __construct($username, $intent = 'authenticate', $ttl = '+15 minutes')
+    public function __construct($username, $ttl = '+15 minutes')
     {
         $this->username = $username;
-        $this->intent = $intent;
         $this->expiration = new DateTime($ttl);
         $this->token = static::generateToken();
     }
@@ -70,16 +64,6 @@ class Voucher implements IntentedVoucherInterface
     public function getToken()
     {
         return $this->token;
-    }
-
-    /**
-     * Get intent
-     *
-     * @return string
-     */
-    public function getIntent()
-    {
-        return $this->intent;
     }
 
     /**
@@ -107,9 +91,9 @@ class Voucher implements IntentedVoucherInterface
      *
      * @return bool
      */
-    public function isExpired(DateTime $date = null)
+    public function isExpired()
     {
-        return ($date ?: new DateTime()) > $this->expiration;
+        return new DateTime() > $this->expiration;
     }
 
     /**
@@ -130,7 +114,6 @@ class Voucher implements IntentedVoucherInterface
         return serialize([
             $this->token,
             $this->username,
-            $this->intent,
             $this->expiration,
         ]);
     }
@@ -140,6 +123,6 @@ class Voucher implements IntentedVoucherInterface
      */
     public function unserialize($serialized)
     {
-        list($this->token, $this->username, $this->intent, $this->expiration) = unserialize($serialized);
+        list($this->token, $this->username, $this->expiration) = unserialize($serialized);
     }
 }
