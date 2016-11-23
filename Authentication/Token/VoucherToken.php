@@ -11,8 +11,8 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Authentication\Token;
 
-use InvalidArgumentException;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\AuthenticationVoucherInterface;
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**

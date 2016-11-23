@@ -51,11 +51,11 @@ security:
 
 ### Generate a voucher token in your app
 
-Create a new `VoucherInterface` (you can use the provided `Voucher` implementation or make your own).
+Create a new `VoucherInterface` (you can use the provided `DisposableAuthenticationVoucher` implementation or make your own).
 Then get its token with `getToken()` and, for example, send it to the user by email:
 
 ```php
-use Elao\Bundle\VoucherAuthenticationBundle\Voucher\Voucher;
+use Elao\Bundle\VoucherAuthenticationBundle\Voucher\DisposableAuthenticationVoucher;
 
 class SecurityController extends Controller {
     /**
@@ -63,7 +63,7 @@ class SecurityController extends Controller {
      */
     public function forgotPasswordAction()
     {
-        $voucher = new Voucher('jane_doe', 'reset_password', '+1 hour');
+        $voucher = new DisposableAuthenticationVoucher('jane_doe', '+1 hour');
         $activationUrl = $this->generateUrl('voucher', ['token' => $voucher->getToken()]);
 
         // Don't forget to persist the voucher, or the user won't be able to log in.
@@ -78,12 +78,11 @@ class SecurityController extends Controller {
 
 Generate a voucher for the given username (optionally set a time-to-live):
 
-    bin/console elao:voucher:generate [username] (--ttl="+1 hour")
+    bin/console voucher:generate:authenticatio [username] (--ttl="+1 hour")
 
 Will result in:
 
-> Voucher for user admin with intent authenticate and expriation on 2016-11-15 13:42:24:
-> 6fb11ec1eecd07865d940dd0f990d66b
+> Authentication voucher for user admin with expiration on  2016-11-15 13:42:24: 6fb11ec1eecd07865d940dd0f990d66b
 
 ### Restricting user access using vouchers
 

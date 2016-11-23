@@ -11,7 +11,6 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Behavior;
 
-use DateTime;
 use Serializable;
 
 /**

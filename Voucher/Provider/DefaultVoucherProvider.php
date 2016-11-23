@@ -11,7 +11,6 @@
 
 namespace Elao\Bundle\VoucherAuthenticationBundle\Voucher\Provider;
 
-use Elao\Bundle\VoucherAuthenticationBundle\Behavior\DisposableVoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\TimedVoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherInterface;
 use Elao\Bundle\VoucherAuthenticationBundle\Behavior\VoucherProviderInterface;

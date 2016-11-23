@@ -28,6 +28,7 @@
         }
     },
     "scripts": {
-        "lint": "php-cs-fixer fix --config-file=.php_cs --dry-run --diff"
+        "lint": "php-cs-fixer fix --config-file=.php_cs --dry-run --diff",
+        "lint-fix": "php-cs-fixer fix --config-file=.php_cs"
     }
 }
